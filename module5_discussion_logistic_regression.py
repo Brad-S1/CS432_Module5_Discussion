@@ -28,8 +28,7 @@ print("My Data Set:\n",MyDataSet)
 
 # make sure training and testing data is balanced using stratify
 TrainingData, TestingData = train_test_split(MyDataSet, test_size=.4, 
-                                            stratify=MyDataSet["Habitable"],
-                                            random_state=42)
+                                            stratify=MyDataSet["Habitable"])
 print("Training Data:\n", TrainingData)
 print("Testing Data:\n", TestingData)
 
@@ -89,9 +88,6 @@ print("Prediction Probabilities:\n", My_LR_Model.predict_proba(TestingData))
 print("Model coefficients: ", My_LR_Model.coef_)
 # we can also print the intercept (b)
 print("Model intercept: ", My_LR_Model.intercept_)
-
-
-
 
 
 
