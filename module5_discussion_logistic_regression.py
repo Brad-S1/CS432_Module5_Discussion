@@ -26,7 +26,10 @@ print("My Data Set:\n",MyDataSet)
 
 ## Split training and testing data (will need to remove Planet_ID as well)
 
-TrainingData, TestingData = train_test_split(MyDataSet, test_size=.4)
+# make sure training and testing data is balanced using stratify
+TrainingData, TestingData = train_test_split(MyDataSet, test_size=.4, 
+                                            stratify=MyDataSet["Habitable"],
+                                            random_state=42)
 print("Training Data:\n", TrainingData)
 print("Testing Data:\n", TestingData)
 
@@ -49,6 +52,39 @@ TestingData = TestingData.drop(["Habitable", "Planet_ID"], axis=1)
 # print to make sure everything is correct
 print("The Testing labels are:\n", TestingLabels)
 print("The Testing Data is:\n", TestingData)
+
+
+#### Perform Logistic Regression ####
+
+## instantiate
+MyLR = LogisticRegression()
+
+## Perform logistic regression on training data and training labels
+My_LR_Model = MyLR.fit(TrainingData, TrainingLabels)
+
+### Use model to predict test data ###
+
+MyModelPredictions = My_LR_Model.predict(TestingData)
+print("My Model Predictions:\n", MyModelPredictions)
+
+## compare to the actual labels
+print("Actual test data labels:\n", TestingLabels)
+
+## create standard confusion matrix to compare actual and predicted labels
+MyCM = confusion_matrix(TestingLabels, MyModelPredictions)
+print(MyCM)
+
+# use Seaborn to create a nice looking confusion matrix visualization
+sns.heatmap(MyCM, annot=True, cmap='Greens')
+
+#### view properties of the model ####
+## view accuracy score
+print("Training Data Accuracy score: ", My_LR_Model.score(TrainingData, TrainingLabels))
+print("Testing Data Accuracy score: ", My_LR_Model.score(TestingData, TestingLabels))
+
+## lets look at the prediction probabilities for the testing data
+print("Prediction Probabilities:\n", My_LR_Model.predict_proba(TestingData))
+
 
 
 
