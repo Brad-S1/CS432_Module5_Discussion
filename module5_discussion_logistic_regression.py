@@ -85,6 +85,13 @@ print("Testing Data Accuracy score: ", My_LR_Model.score(TestingData, TestingLab
 ## lets look at the prediction probabilities for the testing data
 print("Prediction Probabilities:\n", My_LR_Model.predict_proba(TestingData))
 
+## lets print the coefficients (weights) of the model
+print("Model coefficients: ", My_LR_Model.coef_)
+# we can also print the intercept (b)
+print("Model intercept: ", My_LR_Model.intercept_)
+
+
+
 
 
 
