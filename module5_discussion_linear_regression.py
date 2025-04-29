@@ -33,20 +33,20 @@ print("My Data Set:\n",MyDataSet)
 ## Place all independent variables in to X and dependent variable into Y
 Y = MyDataSet[["Habitability_Score"]]
 X = MyDataSet.drop(["Habitability_Score", "Planet_ID"], axis=1)
-print("dependent variable Y: ", Y)
-print("independent variable X: ", X)
+print("dependent variable Y: \n", Y)
+print("independent variable X: \n", X)
 
-# Standardize the features
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
+# # Standardize the features
+# scaler = StandardScaler()
+# X_scaled = scaler.fit_transform(X)
+# X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
 
 ### Train the model
 
 ## Split training and testing data (will need to remove Planet_ID as well)
 
 # Print to make sure everything is correct
-x_train, x_test, y_train, y_test = train_test_split(X_scaled, Y, test_size=.4)
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=.4)
 print("Independent Variable Training Data:\n", x_train)
 print("Dependent Variable Training Data:\n", y_train)
 print("Independent Variable Testing Data:\n", x_test)
@@ -76,13 +76,30 @@ print("Actual test data labels:\n", y_test)
 # sns.heatmap(MyCM, annot=True, cmap='Reds')
 
 # Create a scatter plot to visualize predictions vs actual values
+# Get predictions for training data too
+train_predictions = My_LR_Model.predict(x_train)
 
-plt.figure(figsize=(8, 6))
-plt.scatter(y_test, MyModelPredictions, alpha=0.7)
-plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+# Create a new figure
+plt.figure(figsize=(10, 7))
+
+# Plot training data
+plt.scatter(y_train, train_predictions, color='blue', alpha=0.7, label='Training data')
+
+# Plot test data
+plt.scatter(y_test, MyModelPredictions, color='red', alpha=0.7, label='Testing data')
+
+# Calculate a single trend line based on ONLY the training data
+z = np.polyfit(y_train.values.flatten(), train_predictions.flatten(), 1)
+p = np.poly1d(z)
+
+# Create line points
+x_line = np.linspace(min(y_train.values.flatten()), max(y_train.values.flatten()), 100)
+plt.plot(x_line, p(x_line), 'g-', label='Model trend line (training only)')
+
 plt.xlabel('Actual Habitability Score')
 plt.ylabel('Predicted Habitability Score')
-plt.title('Actual vs Predicted Habitability Scores')
+plt.title('Linear Regression Model: Training and Testing Performance')
+plt.legend()
 plt.grid(True)
 plt.show()
 
